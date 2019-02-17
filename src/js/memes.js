@@ -28,7 +28,45 @@ class Memes {
            let reader = new FileReader();
            
            reader.onload = () => {
-               console.log('file completely read');
+               let image = new Image();
+
+               image.onload = () => {
+                 this.$canvas.height = image.height;
+                 this.$canvas.width = image.width;
+
+                 context.clearRect(0, 0, this.$canvas.height, this.$canvas.width);
+                 context.drawImage(image, 0, 0);
+
+                 let fontSize = ((this.$canvas.width+this.$canvas.height) / 2) * 4 / 100;
+                 context.font = `${fontSize}pt sans-serif`;
+                 context.textAlign = 'center';
+                 context.texstBaseline = 'top';
+
+                 /**
+                 * Fix lines over M
+                 */
+                 context.lineJoin = 'round';
+
+                 /** Stroke Text */
+                 context.lineWidth = fontSize/5;
+                 context.strokeStyle = 'black';
+
+                 /** Fill Text */
+                 context.fillStyle = 'white';
+
+                 const topText = this.$topTextInput.value.toUpperCase();
+                 const bottomText = this.$bottomTextInput.value.toUpperCase();
+
+                 // Top Text
+                 context.strokeText(topText, this.$canvas.width/2, this.$canvas.height*(5/100));
+                 context.fillText(topText, this.$canvas.width/2, this.$canvas.height*(5/100));
+
+                 // Bottom Text 
+                 context.strokeText(bottomText, this.$canvas.width/2, this.$canvas.height*(90/100));
+                 context.fillText(bottomText, this.$canvas.width/2, this.$canvas.height*(90/100));
+               };
+
+               image.src = reader.result;
            };
            reader.readAsDataURL(this.$imageInput.files[0]);
            console.log('This will get printed first!');
@@ -43,6 +81,12 @@ class Memes {
         inputNodes.forEach(element => element.addEventListener('keyup', this.createMeme));
         inputNodes.forEach(element => element.addEventListener('change', this.createMeme));
         this.$downloadButton.addEventListener('click', this.downloadMeme);
+    }
+
+    downloadMeme() {
+        const imageSource = this.$canvas.toDataURL('image/png');
+        let att = document.createAttribute('href');
+        this.$downloadButton.setAttributeNode(att);
     }
 }
 
