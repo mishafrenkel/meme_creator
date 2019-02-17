@@ -1,0 +1,1 @@
+This is a simple app that allows users to design memes. Users can select an image to serve as a backdrop, and edit text to be overlaid on the top and bottom of the image. When complete, the image can be exported.
