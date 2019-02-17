@@ -1,4 +1,4 @@
-import './general';
+// import './general';
 
 const deviceWidth = window.innerWidth;
 
